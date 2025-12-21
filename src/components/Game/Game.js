@@ -14,7 +14,7 @@ function Game() {
   const [guessWordList, setGuessWordList] = React.useState([]);
 
   function handleAddToWordList(word) {
-    if (word.length < 5) {
+    if (word.length < 5 || guessWordList.length == 6) {
       return;
     }
 

@@ -1,13 +1,17 @@
 import React from 'react';
 import { range } from '../../utils';
+import { checkGuess } from '../../game-helpers';
 
-function Guess({word}) {
-  const emptyWordSplit = range(0, 5).map((_) => '');
-  const characters = word ? word.split('') : emptyWordSplit;
+function Guess({ wordInfo }) {
+  const emptyWordSplit = ['', '', '', '', ''];
+  const rowInfo = wordInfo ? wordInfo : { 'word': '', 'result': {} }
+  const characters = rowInfo['word'].length == 5 ? rowInfo['word'].split('') : emptyWordSplit;
 
   return (
     <p className="guess">
-      {characters.map((ch, i) => <span className="cell" key={i}>{ch}</span> )}
+      {characters.map((ch, i) => 
+      <span className={`cell ${rowInfo['result']?.[i]?.['status']}`} key={i}>{ch}</span> 
+      )}
     </p>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { sample } from '../../utils';
+import { range, sample } from '../../utils';
 import { WORDS } from '../../data';
 import GameInput from '../GameInput/GameInput';
 import GuessWordList from '../GuessedWordList/GuessedWordList';
@@ -14,6 +14,19 @@ console.info({ answer });
 function Game() {
   const [guessWordList, setGuessWordList] = React.useState([]);
   const [isWon, setIsWon] = React.useState(false);
+
+  const keyboard = [];
+  for (row = 0; row < 3; row++) {
+    const currentRow = []
+    for (k = 0; k < Math.ceil(26 / 3); k++) {
+      const code = (Math.ceil(26 / 3) * row + k);
+      if (code > 25) {
+        break 
+      }
+      currentRow.push({ letter: String.fromCharCode(97 + code), status: '' });
+    }
+    keyboard.push(currentRow);
+  }
 
   function handleAddToWordList(word) {
     if (isWon) return;
@@ -60,6 +73,12 @@ function Game() {
     
     <GuessWordList guessWordList={guessWordList} />
     <GameInput addToWordList={handleAddToWordList}/>
+
+    <div className="keyboard">
+      {range(0, 26).map(i => 
+        <span>{String.fromCharCode(97 + i)}</span>
+      )}
+    </div>
   </>;
 }
 

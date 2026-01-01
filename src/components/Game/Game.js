@@ -14,19 +14,29 @@ console.info({ answer });
 function Game() {
   const [guessWordList, setGuessWordList] = React.useState([]);
   const [isWon, setIsWon] = React.useState(false);
+  const [letterStatus, setLetterStatus] = React.useState(initializeLetters());
 
-  const keyboard = [];
-  for (row = 0; row < 3; row++) {
-    const currentRow = []
-    for (k = 0; k < Math.ceil(26 / 3); k++) {
-      const code = (Math.ceil(26 / 3) * row + k);
-      if (code > 25) {
-        break 
+  function initializeLetters() {
+    const result = {};
+    for (row = 0; row < 3; row++) {
+      for (k = 0; k < Math.ceil(26 / 3); k++) {
+        const code = (Math.ceil(26 / 3) * row + k);
+        if (code > 25) {
+          break 
+        }
+        const ch = String.fromCharCode(97 + code);
+        result[ch] = 0;
       }
-      currentRow.push({ letter: String.fromCharCode(97 + code), status: '' });
     }
-    keyboard.push(currentRow);
+    return result;
   }
+  
+
+  // function updateKeyboard(wordList) {
+  //   const guessedLetters = new Set(wordList.map((guessWordInfo) => guessWordInfo.word.split('')).flatMap((x) => x));
+  //   const guessLettersMap = Array.from(guessedLetters).reduce((acc, v) => {acc[v] = true; return acc;}, {});
+  //   setLetterStatus(guessLettersMap);
+  // }
 
   function handleAddToWordList(word) {
     if (isWon) return;
@@ -45,12 +55,17 @@ function Game() {
     }
     
     const newGuessWordList = [...guessWordList, newEntry];
+  
     setGuessWordList(newGuessWordList);
-    console.log("Result: ", result);
+
+    const nextLetterStatus = {...letterStatus};
+    console.log(nextLetterStatus);
+    newWord.split('').forEach((ch) => {
+      nextLetterStatus[ch.toLowerCase()]++;
+    });
+    setLetterStatus(nextLetterStatus);
 
     const newIsWonState = result.find((item) => item.status != 'correct' ) ? false : true
-    console.log("IsWon", newIsWonState);
-
     if (newIsWonState) {
       setIsWon(true)
     }
@@ -72,13 +87,14 @@ function Game() {
     }
     
     <GuessWordList guessWordList={guessWordList} />
-    <GameInput addToWordList={handleAddToWordList}/>
 
-    <div className="keyboard">
-      {range(0, 26).map(i => 
-        <span>{String.fromCharCode(97 + i)}</span>
-      )}
-    </div>
+    <ul className="keyboard">
+      {Object.entries(letterStatus).map((item) => (
+        <li key={item[0]} className={`key ${item[1] > 0 ? 'active' : ''}`}>{item[0]}</li>
+      ))}
+    </ul>
+
+    <GameInput addToWordList={handleAddToWordList}/>
   </>;
 }
 

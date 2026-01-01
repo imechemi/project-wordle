@@ -230,3 +230,23 @@ h1 {
     transform: translateY(0%);
   }
 }
+
+.keyboard {
+  text-align: center;
+  margin-top: 2px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+
+  .key {
+    padding: 0.5em;
+    border: solid 1px #ccc;
+  
+    &.active {
+      background-color: #57e977;
+    }
+  }
+}

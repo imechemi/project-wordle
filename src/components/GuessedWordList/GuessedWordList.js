@@ -4,7 +4,6 @@ import Guess from '../Guess/Guess';
 function GuessedWordList({guessWordList}) {
   const rows = range(0, 6);
 
-  console.log("Guess word list", guessWordList);
   return (
     <div className="guess-results">
       {rows.map((i) => {        
